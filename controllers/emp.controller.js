@@ -3,9 +3,7 @@
  * @author vinod khetade on 13/03/2020..
  */
 
-const Emp = require('../models/emp.model.js');
 var async = require("async");
-
 // insert dummy data to test
 exports.init = (req, res) => {
 	if (req.body.users) {
@@ -72,13 +70,6 @@ exports.init = (req, res) => {
 				}
 				console.log(err,result);
 			});
-			// Emp.insertMany(user)  
-			// .then((result) => {
-			// 		callback(null,true)
-			// })
-			// .catch(err => {
-			// 	callback(err)
-			// });
 		},
 		function(callback) {
 			callback(null,true);
@@ -95,72 +86,28 @@ exports.init = (req, res) => {
 	  });
 }
 
-
-exports.emps = (req, res) => {
-	if (!req.body){
-		return res.status(400).send({
-			            message:  "Emp id missing."
-			        });
-	}
-	var myMatch={}
-	if (req.body.name) {
-        var pattern = req.body.name
-        myMatch['$or'] = [{ 'name': { "$regex": pattern, $options: "i" } }]
-	  }
-	  
-	  if (req.body.start_value && req.body.end_value) {
-		var value_range = {
-		  $gte: req.body.start_value,
-		  $lte: req.body.end_value
-		}
-		myMatch["salary"] = value_range
-	
-	  } else if (req.body.start_value) {
-		var value_range = {
-		  $gte: req.body.start_value
-		}
-		myMatch["salary"] = value_range
-	  } else if (req.body.end_value) {
-		var value_range = {
-		  $lte: req.body.end_value
-		}
-		myMatch["salary"] = value_range
-	  }
-	var pipeline = [
-        {
-            "$match": myMatch
-        }
-       
-    ]
-	Emp.aggregate(pipeline)
-		.then(empList => {
-			res.send(empList);
-		}).catch(err => {
-			res.status(500).send({
-				message: err.message
-			});
-		});
-};
-
 exports.searchName = (req, res) => {
-	if (!req.body.name){
+	if (!req.body.startValue && !req.body.endValue) {
 		return res.status(400).send({
-			            message:  "name  missing."
-			        });
+			message: "start value and end value  missing."
+		});
 	}
 	var str = {
-        stringPart:req.body.name
-    }
-
-    db.query('SELECT * FROM emptable WHERE salary BETWEEN 1000 AND 10000;',function(err, rows, fields) {
-        if (err) throw err;
-        var data=[];
-        for(i=0;i<rows.length;i++)
-        {
-			console.log(rows[i])
-            data.push(rows[i]);
-        }
-        res.send(JSON.stringify(data));
-    });
+		stringPart: req.body.name
+	}
+	var queryString = 'SELECT * FROM emptable WHERE salary BETWEEN ' + req.body.startValue + ' AND ' + req.body.endValue
+	db.query(queryString, function (err, rows, fields) {
+		if (err) throw err;
+		var data = [];
+		for (i = 0; i < rows.length; i++) {
+			data.push(rows[i]);
+		}
+		if (Array.isArray(data) && data.length > 0) {
+			res.send(data);
+		}
+		else {
+			res.send({ "msg": "No data found" });
+		}
+	});
 };
 
