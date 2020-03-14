@@ -142,25 +142,25 @@ exports.emps = (req, res) => {
 		});
 };
 
-exports.updateEmp = (req, res) => {
-	if (!req.body.productId){
+exports.searchName = (req, res) => {
+	if (!req.body.name){
 		return res.status(400).send({
-			            message:  "productId id missing."
+			            message:  "name  missing."
 			        });
 	}
-    Prod.findOneAndUpdate({productId:req.body.productId},req.body, {new: true})
-    .then(note => {
-        if(!note) {
-            return res.status(404).send({
-                message: "dept data not found with id " + req.body.productId
-            });
+	var str = {
+        stringPart:req.body.name
+    }
+
+    db.query('SELECT * FROM emptable WHERE salary BETWEEN 1000 AND 10000;',function(err, rows, fields) {
+        if (err) throw err;
+        var data=[];
+        for(i=0;i<rows.length;i++)
+        {
+			console.log(rows[i])
+            data.push(rows[i]);
         }
-        res.send(note);
-    }).catch(err => {
-     
-        return res.status(500).send({
-            message: "Error updating product data with id " 
-        });``
+        res.send(JSON.stringify(data));
     });
 };
 
