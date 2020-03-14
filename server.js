@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json())
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
 app.use(bodyParser.urlencoded({ extended:true}))
+const mysql = require('mysql');
 // Configuring the database
 const dbConfig = require('./config/mongodb.config.js');
 const mongoose = require('mongoose');
@@ -22,6 +23,23 @@ mongoose.connect(dbConfig.url, { useNewUrlParser: true })
     console.log('Could not connect to MongoDB.');
     process.exit();
 });
+
+const db = mysql.createConnection ({
+  host: 'localhost',
+  user: 'root',
+  password: 'Nearlaw11@',
+  database: 'emp'
+});
+
+
+// connect to database
+db.connect((err) => {
+  if (err) {
+      throw err;
+  }
+  console.log('Successfully connected to MySql');
+});
+global.db = db;
 
 require('./routes/emp.routes.js')(app);
 

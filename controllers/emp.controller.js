@@ -12,61 +12,73 @@ exports.init = (req, res) => {
 		var product = req.body.users
 	}
 	else {
-		var user = [
-			{
-				eId: "1",
-				name: "Nitin jadhav",
-				email: "n@gmail.com",
-				salary: 10000,
-			},
-			{
-				eId: "2",
-				name: "rahul pawar",
-				email: "H@gmail.com",
-				salary: 1111
-			},
-			{
-				eId: "3",
-				name: "paradip patil",
-				email: "p@ymail.com",
-				salary: 12690
-			},
-			{
-				eId: "4",
-				name: "rambhau jadhav",
-				email: "pd@ymail.com",
-				salary: 8000
-			},
-			{
-				eId: "5",
-				name: "kadam rahul",
-				email: "k@ymail.com",
-				salary: 5678
-			},
-			{
-				eId: "6",
-				name: "priti patil",
-				email: "pp@yma.com",
-				salary: 23000,
-			},
-			{
-				eId: "7",
-				name: "satech ramesh",
-				email: "jm@gmail.com",
-				salary: 55908
+		var records = [
+			[
+				 1,
+				"Nitin jadhav",
+				 "n@gmail.com",
+				 10000,
+			],
+			[
+				 2,
+				"rahul pawar",
+				 "H@gmail.com",
+				 1111
+			],
+			[
+				 3,
+				"paradip patil",
+				 "p@ymail.com",
+				 12690
+			],
+			[
+				 4,
+				"rambhau jadhav",
+				 "pd@ymail.com",
+				 8000
+			],
+			[
+				 5,
+				"kadam rahul",
+				 "k@ymail.com",
+				 5678
+			],
+			[
+				 6,
+				"priti patil",
+				 "pp@yma.com",
+				 23000,
+			],
+			[
+				7,
+				"satech ramesh",
+				 "jm@gmail.com",
+				 55908
 	
-			}
+			]
 		]
 	}
 	async.parallel([
 		function(callback) {
-			Emp.insertMany(user)  
-			.then((result) => {
-					callback(null,true)
-			})
-			.catch(err => {
-				callback(err)
+			var sql = "INSERT INTO emptable (eId,name,email,salary) VALUES ?";
+ 
+			var query = db.query(sql, [records], function(err, result) {
+				if (err)
+				{
+					callback(err)
+				}
+				else{
+					callback(null,result);
+				}
+				console.log(err,result);
 			});
+			// Emp.insertMany(user)  
+			// .then((result) => {
+			// 		callback(null,true)
+			// })
+			// .catch(err => {
+			// 	callback(err)
+			// });
 		},
 		function(callback) {
 			callback(null,true);

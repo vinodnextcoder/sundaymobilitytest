@@ -16,6 +16,7 @@
     "body-parser": "latest",
     "cors": "^2.8.4",
     "express": "latest",
-    "mongoose": "latest"
+    "mongoose": "latest",
+    "mysql": "^2.18.1"
   }
 }
