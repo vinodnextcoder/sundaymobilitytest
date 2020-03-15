@@ -59,7 +59,6 @@ exports.init = (req, res) => {
 	async.parallel([
 		function(callback) {
 			var sql = "INSERT INTO emptable (eId,name,email,salary) VALUES ?";
- 
 			var query = db.query(sql, [records], function(err, result) {
 				if (err)
 				{
@@ -68,7 +67,6 @@ exports.init = (req, res) => {
 				else{
 					callback(null,result);
 				}
-				console.log(err,result);
 			});
 		},
 		function(callback) {
@@ -82,7 +80,6 @@ exports.init = (req, res) => {
 		  {
 			  res.status(200).json({'success': 'New Documents Added!'});
 		  }
-		console.log(results);
 	  });
 }
 

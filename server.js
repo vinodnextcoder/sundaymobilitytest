@@ -23,16 +23,14 @@ mongoose.connect(dbConfig.url, { useNewUrlParser: true })
     console.log('Could not connect to MongoDB.');
     process.exit();
 });
-
+// add user and password to this files
 const db = mysql.createConnection ({
   host: 'localhost',
   user: 'root',
-  password: 'Nearlaw11@',
+  password: '',
   database: 'emp'
 });
-
-
-// connect to database
+// connect to  mysql connect 
 db.connect((err) => {
   if (err) {
       throw err;
@@ -48,5 +46,5 @@ var server = app.listen(3000, function () {
 
   var port = server.address().port
 
-  console.log("App listening at http://%s",  port)
+  console.log("App listening at http:/localhost/%s",  port)
 })
